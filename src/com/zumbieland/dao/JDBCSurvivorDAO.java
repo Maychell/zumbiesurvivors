@@ -95,4 +95,29 @@ public class JDBCSurvivorDAO implements SurvivorDAO {
 	    		survivor.isInfected(), survivor.getId());
 	    return;
 	}
+	
+	@Override
+	public int count() {
+		String SQL = "select count(*) from "+Survivor.SURVIVOR;
+		try {
+		    int count = jdbcTemplateObject.queryForObject(
+                    SQL, Integer.class);
+		    return count;
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+	
+	@Override
+	public int countInfected() {
+		String SQL = "select count(*) from "+Survivor.SURVIVOR+
+				" where "+Survivor.INFECTED+" = ?";
+		try {
+		    int count = jdbcTemplateObject.queryForObject(
+                    SQL, Integer.class, true);
+		    return count;
+		} catch (Exception e) {
+			return 0;
+		}
+	}
 }

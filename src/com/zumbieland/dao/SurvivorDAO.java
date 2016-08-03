@@ -38,4 +38,14 @@ public interface SurvivorDAO {
 	 * a record into the Survivors table.
 	 */
 	public void update(Survivor survivor);
+	/**
+	 * This is the method to count the number
+	 * of records from the Survivors table 
+	 */
+	public int count();
+	/**
+	 * This is the method to count the number
+	 * of infected records from the Survivors table 
+	 */
+	public int countInfected();
 }

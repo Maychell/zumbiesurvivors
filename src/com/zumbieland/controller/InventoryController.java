@@ -20,7 +20,7 @@ import com.zumbieland.model.Survivor;
 @RestController
 public class InventoryController {
 
-private JDBCInventoryDAO dao;
+	private JDBCInventoryDAO dao;
 	
 	@Autowired
 	public InventoryController(JDBCInventoryDAO dao){
