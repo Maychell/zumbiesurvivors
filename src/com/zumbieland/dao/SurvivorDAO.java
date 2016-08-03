@@ -21,7 +21,7 @@ public interface SurvivorDAO {
 	    * a record from the Survivors table corresponding
 	    * to a passed Survivors id.
 	    */
-	   public Survivor getSurvivorById(Integer id);
+	   public Survivor getSurvivorById(Long id);
 	   /** 
 	    * This is the method to be used to list down
 	    * all the records from the Survivors table.

@@ -1,17 +1,26 @@
 package com.zumbieland.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.zumbieland.dao.JDBCSurvivorDAO;
 import com.zumbieland.model.Survivor;
 
-@Controller
+@RestController
 public class SurvivorController {
 	
 	private JDBCSurvivorDAO dao;
@@ -21,27 +30,70 @@ public class SurvivorController {
 	     this.dao = dao;
 	}
 	
-	@RequestMapping(value = "/addZumbie", method = RequestMethod.GET)
-	public String adiciona(ModelMap model) {
-//		JdbcTarefaDao dao = new JdbcTarefaDao();
-//	    dao.adiciona(tarefa);
-//	    return survivor.toString();
-//		ApplicationContext context = 
-//	             new ClassPathXmlApplicationContext("classpath*:**/servlet.xml");
-//
-//		JDBCSurvivorDAO dao = 
-//				(JDBCSurvivorDAO) context.getBean("JDBCSurvivorDAO");
-		
-		Survivor test = new Survivor();
-		test.setId((long) 10);
-		test.setAge(12);
-		test.setLatitude("fdsfs");
-		test.setLongitude("fdsfs");
-		test.setGender('m');
-		test.setName("dsadad");
-		dao.create(test);
-		
-		model.addAttribute("tarefa", test.toString());
-		return "survivor/add_zumbie";
+	/**
+	 * create a survivor through RESTful API
+	 * @param user
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/survivor", method = RequestMethod.POST, headers = {"content-type=application/json,application/xml"})
+	public String addSurvivor(@ModelAttribute Survivor user, ModelMap model) {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, String> errorHandler = new HashMap<>();
+		try {
+			if(user == null || user.getName() == null) {
+				errorHandler.put("error", "Survivor is missing.");
+				return mapper.writeValueAsString(errorHandler);
+			}
+			dao.create(user);
+			return mapper.writeValueAsString(user);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * returns all survivors data through RESTful API
+	 * @return
+	 */
+	@RequestMapping(value = "/survivor", method = RequestMethod.GET, headers="Accept=application/json")
+	public String getSurvivors() {
+		ObjectMapper mapper = new ObjectMapper();
+		List<Survivor> survivors = dao.listSurvivors();
+		if(survivors.isEmpty())
+			return null;
+		try {
+			return mapper.writeValueAsString(survivors);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * returns an single survivor by id
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/survivor/{id}", method = RequestMethod.GET, headers="Accept=application/json")
+	public String getSurvivor(@PathVariable int id) {
+		ObjectMapper mapper = new ObjectMapper();
+		Survivor survivor = dao.getSurvivorById((long) id);
+		if(survivor == null)
+			return null;
+		try {
+			return mapper.writeValueAsString(survivor);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

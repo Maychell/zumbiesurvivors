@@ -1,20 +1,24 @@
 package com.zumbieland.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import com.zumbieland.model.Survivor;
 
 public class JDBCSurvivorDAO implements SurvivorDAO {
-//	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplateObject;
 
 	@Override
 	public void setDataSource(DataSource dataSource) {
-//		this.dataSource = dataSource;
 	    this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
 
@@ -27,18 +31,35 @@ public class JDBCSurvivorDAO implements SurvivorDAO {
 				+ Survivor.LATITUDE + ","
 				+ Survivor.LONGITUDE + ") values (?, ?, ?, ?, ?)";
 		
-		jdbcTemplateObject.update( SQL, survivor.getName(), survivor.getAge(),
-				String.valueOf(survivor.getGender()), survivor.getLatitude(), survivor.getLongitude());
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		jdbcTemplateObject.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement ps = connection.prepareStatement(SQL, new String[] {"id"});
+				ps.setString(1, survivor.getName());
+				ps.setInt(2, survivor.getAge());
+				ps.setString(3, String.valueOf(survivor.getGender()));
+				ps.setString(4, survivor.getLatitude());
+				ps.setString(5, survivor.getLongitude());
+				return ps;
+			}
+		},keyHolder);
+		survivor.setId(keyHolder.getKey().longValue());
 		return;
 	}
 
 	@Override
-	public Survivor getSurvivorById(Integer id) {
+	public Survivor getSurvivorById(Long id) {
 		String SQL = "select * from "+Survivor.SURVIVOR+
 				" where "+Survivor._ID+" = ?";
-	    Survivor survivor = jdbcTemplateObject.queryForObject(SQL, 
-	                        new Object[]{id}, new SurvivorMapper());
-	    return survivor;
+		try {
+		    Survivor survivor = jdbcTemplateObject.queryForObject(SQL, 
+		                        new Object[]{id}, new SurvivorMapper());
+		    return survivor;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@Override
