@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import com.zumbieland.model.Inventory;
+import com.zumbieland.model.Item;
 import com.zumbieland.model.Survivor;
 
 public class JDBCInventoryDAO implements InventoryDAO {
@@ -58,9 +59,28 @@ public class JDBCInventoryDAO implements InventoryDAO {
 		}
 	}
 
+	/**
+	 * Formatting the select clause to handle when the mapper is building the nested attributes
+	 */
 	@Override
 	public List<Inventory> listSurvivorInventory(Survivor survivor) {
-		String SQL = "select * from "+Inventory.SURVIVOR;
+		String SQL = "select "+
+				"inv."+Inventory._ID+" as \""+Inventory.INVENTORY+"."+Inventory._ID+"\","+
+				"inv."+Inventory.ITEM+" as \""+Inventory.INVENTORY+"."+Inventory.ITEM+"\","+
+				"inv."+Inventory.SURVIVOR+" as \""+Inventory.INVENTORY+"."+Inventory.SURVIVOR+"\","+
+				"it."+Item._ID+" as \""+Item.ITEM+"."+Item._ID+"\","+
+				"it."+Item.NAME+" as \""+Item.ITEM+"."+Item.NAME+"\","+
+				"it."+Item.POINTS+" as \""+Item.ITEM+"."+Item.POINTS+"\","+
+				"su."+Survivor._ID+" as \""+Survivor.SURVIVOR+"."+Survivor._ID+"\","+
+				"su."+Survivor.NAME+" as \""+Survivor.SURVIVOR+"."+Survivor.NAME+"\","+
+				"su."+Survivor.AGE+" as \""+Survivor.SURVIVOR+"."+Survivor.AGE+"\","+
+				"su."+Survivor.LATITUDE+" as \""+Survivor.SURVIVOR+"."+Survivor.LATITUDE+"\","+
+				"su."+Survivor.LONGITUDE+" as \""+Survivor.SURVIVOR+"."+Survivor.LONGITUDE+"\","+
+				"su."+Survivor.GENDER+" as \""+Survivor.SURVIVOR+"."+Survivor.GENDER+"\","+
+				"su."+Survivor.INFECTED+" as \""+Survivor.SURVIVOR+"."+Survivor.INFECTED+"\""+
+			" from "+Inventory.INVENTORY+" inv "+
+				" inner join "+Item.ITEM+" it on it."+Item._ID+"=inv."+Inventory.ITEM+
+				" inner join "+Survivor.SURVIVOR+" su on su."+Survivor._ID+"=inv."+Inventory.SURVIVOR;
 		List<Inventory> inventories = jdbcTemplateObject.query(SQL,
 									new InventoryMapper());
 	      return inventories;
