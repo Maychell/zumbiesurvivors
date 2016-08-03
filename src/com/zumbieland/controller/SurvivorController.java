@@ -123,5 +123,4 @@ public class SurvivorController {
 		return null;
 	}
 	
-	
 }

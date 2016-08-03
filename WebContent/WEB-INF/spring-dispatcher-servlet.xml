@@ -35,5 +35,10 @@
   <bean id="JDBCComplaintDAO" class="com.zumbieland.dao.JDBCComplaintDAO">
   	<property name="dataSource"  ref="dataSource" />    
   </bean>
+  
+  <!-- Definition for JDBCItemDAO bean -->
+  <bean id="JDBCItemDAO" class="com.zumbieland.dao.JDBCItemDAO">
+  	<property name="dataSource"  ref="dataSource" />    
+  </bean>
 
 </beans>
