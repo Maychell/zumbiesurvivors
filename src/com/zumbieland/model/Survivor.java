@@ -5,6 +5,18 @@ package com.zumbieland.model;
  */
 public class Survivor {
 	
+	/*
+	 CREATE TABLE Zumbies(
+	 	ID INT NOT NULL AUTO_INCREMENT,
+	 	NAME VARCHAR(20) NOT NULL,
+	 	AGE INT NOT NULL,
+	 	LATITUDE VARCHAR(50),
+	 	LONGITUDE VARCHAR(50),
+	 	GENDER VARCHAR(1),
+	 	PRIMARY KEY (ID)
+	 );
+	 */
+	
 	private Long id;
 	private String name;
 	private int age;
@@ -90,4 +102,11 @@ public class Survivor {
 		return id + " - " + name + " - " + gender;
 	}
 
+	public static final String SURVIVOR = "survivors";
+	public static final String _ID = "id";
+	public static final String NAME = "name";
+	public static final String AGE = "age";
+	public static final String GENDER = "gender";
+	public static final String LATITUDE = "latitude";
+	public static final String LONGITUDE = "longitude";
 }
