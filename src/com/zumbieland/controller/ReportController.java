@@ -76,4 +76,28 @@ public class ReportController {
 		}
 		return null;
 	}
+	
+	/**
+	 * returns the points lost because of infected survivor
+	 * @return
+	 */
+	@RequestMapping(value = "/reportPointsLost", method = RequestMethod.GET, headers="Accept=application/json")
+	public String getPointsLost() {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, String> messageHandler = new HashMap<>();
+		
+		int infectedSurvivors = daoSurvivor.countInfected();
+		
+		try {
+			messageHandler.put("report", ""+(infectedSurvivors*10));
+			return mapper.writeValueAsString(messageHandler);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
