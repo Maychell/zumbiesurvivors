@@ -68,11 +68,11 @@ public class SurvivorController {
 				errorHandler.put("error", "Survivor is missing.");
 				return mapper.writeValueAsString(errorHandler);
 			}
-			Survivor teste = dao.getSurvivorById(id);
-			teste.setLatitude(survivor.getLatitude());
-			teste.setLongitude(survivor.getLongitude());
-			dao.update(teste);
-			return mapper.writeValueAsString(survivor);
+			Survivor oldSurvivor = dao.getSurvivorById(id);
+			oldSurvivor.setLatitude(survivor.getLatitude());
+			oldSurvivor.setLongitude(survivor.getLongitude());
+			dao.update(oldSurvivor);
+			return mapper.writeValueAsString(oldSurvivor);
 		} catch (Exception e) {
 			return null;
 		}

@@ -30,5 +30,10 @@
   <bean id="JDBCSurvivorDAO" class="com.zumbieland.dao.JDBCSurvivorDAO">
   	<property name="dataSource"  ref="dataSource" />    
   </bean>
+  
+  <!-- Definition for JDBCComplaintDAO bean -->
+  <bean id="JDBCComplaintDAO" class="com.zumbieland.dao.JDBCComplaintDAO">
+  	<property name="dataSource"  ref="dataSource" />    
+  </bean>
 
 </beans>

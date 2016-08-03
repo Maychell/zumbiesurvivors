@@ -28,8 +28,9 @@ public class JDBCSurvivorDAO implements SurvivorDAO {
 				Survivor.NAME + ", " +
 				Survivor.AGE + ", " +
 				Survivor.GENDER + ", " +
-				Survivor.LATITUDE + "," +
-				Survivor.LONGITUDE + ") values (?, ?, ?, ?, ?)";
+				Survivor.LATITUDE + ", " +
+				Survivor.LONGITUDE + ", " +
+				Survivor.INFECTED + ") values (?,?,?,?,?,?)";
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
@@ -42,6 +43,7 @@ public class JDBCSurvivorDAO implements SurvivorDAO {
 				ps.setString(3, String.valueOf(survivor.getGender()));
 				ps.setString(4, survivor.getLatitude());
 				ps.setString(5, survivor.getLongitude());
+				ps.setBoolean(6, false);
 				return ps;
 			}
 		},keyHolder);
@@ -82,11 +84,15 @@ public class JDBCSurvivorDAO implements SurvivorDAO {
 	public void update(Survivor survivor) {
 		String SQL = "update "+Survivor.SURVIVOR+
 				" set " +
+					Survivor.NAME + "=?," +
+					Survivor.AGE + "=?," +
 					Survivor.LATITUDE + "=?," +
-					Survivor.LONGITUDE + "=?" +
+					Survivor.LONGITUDE + "=?," +
+					Survivor.INFECTED + "=?" +
 				" where id = ?";
-	    jdbcTemplateObject.update(SQL, survivor.getLatitude(), survivor.getLongitude(), survivor.getId());
+	    jdbcTemplateObject.update(SQL, survivor.getName(), survivor.getAge(),
+	    		survivor.getLatitude(), survivor.getLongitude(),
+	    		survivor.isInfected(), survivor.getId());
 	    return;
 	}
-
 }

@@ -2,6 +2,8 @@ package com.zumbieland.model;
 
 /**
  * Factory for survivors
+ * @author maychellfernandesdeoliveira
+ *
  */
 public class Survivor {
 	
@@ -13,6 +15,7 @@ public class Survivor {
 	 	LATITUDE VARCHAR(50),
 	 	LONGITUDE VARCHAR(50),
 	 	GENDER VARCHAR(1),
+	 	INFECTED BOOLEAN,
 	 	PRIMARY KEY (ID)
 	 );
 	 */
@@ -23,6 +26,7 @@ public class Survivor {
 	private char gender;
 	private String latitude;
 	private String longitude;
+	private boolean infected;
 	
 	/**
 	 * @return the id
@@ -102,6 +106,19 @@ public class Survivor {
 		return id + " - " + name + " - " + gender;
 	}
 
+	/**
+	 * @return the infected
+	 */
+	public boolean isInfected() {
+		return infected;
+	}
+	/**
+	 * @param infected the infected to set
+	 */
+	public void setInfected(boolean infected) {
+		this.infected = infected;
+	}
+
 	public static final String SURVIVOR = "survivors";
 	public static final String _ID = "id";
 	public static final String NAME = "name";
@@ -109,4 +126,5 @@ public class Survivor {
 	public static final String GENDER = "gender";
 	public static final String LATITUDE = "latitude";
 	public static final String LONGITUDE = "longitude";
+	public static final String INFECTED = "infected";
 }

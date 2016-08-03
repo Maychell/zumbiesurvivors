@@ -17,6 +17,7 @@ public class SurvivorMapper implements RowMapper<Survivor> {
 		survivor.setGender(resultSet.getString(Survivor.GENDER).charAt(0));
 		survivor.setLatitude(resultSet.getString(Survivor.LATITUDE));
 		survivor.setLongitude(resultSet.getString(Survivor.LONGITUDE));
+		survivor.setInfected(resultSet.getBoolean(Survivor.INFECTED));
 		return survivor;
 	}
 
