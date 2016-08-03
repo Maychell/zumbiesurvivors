@@ -4,6 +4,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.zumbieland.model.Inventory;
+import com.zumbieland.model.Item;
 import com.zumbieland.model.Survivor;
 
 public interface InventoryDAO {
@@ -39,4 +40,9 @@ public interface InventoryDAO {
 	 * a record into the Inventories table.
 	 */
 	public void update(Inventory inventory);
+	/** 
+	 * This is the method to count the number of
+	 * Items the Survivors owns
+	 */
+	public int countByItem(Item item);
 }

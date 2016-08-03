@@ -105,4 +105,17 @@ public class JDBCInventoryDAO implements InventoryDAO {
 	    		inventory.getItem().getId(), inventory.getId());
 	    return;
 	}
+	
+	@Override
+	public int countByItem(Item item) {
+		String SQL = "select count(*) from "+Inventory.INVENTORY+
+				" where "+Inventory.ITEM+" = ?";
+		try {
+		    int count = jdbcTemplateObject.queryForObject(
+                    SQL, Integer.class, item.getId());
+		    return count;
+		} catch (Exception e) {
+			return 0;
+		}
+	}
 }
