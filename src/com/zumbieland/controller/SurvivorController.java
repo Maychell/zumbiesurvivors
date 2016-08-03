@@ -11,32 +11,43 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.zumbieland.dao.JDBCInventoryDAO;
+import com.zumbieland.dao.JDBCItemDAO;
 import com.zumbieland.dao.JDBCSurvivorDAO;
+import com.zumbieland.model.Inventory;
+import com.zumbieland.model.Item;
 import com.zumbieland.model.Survivor;
 
 @RestController
 public class SurvivorController {
 	
 	private JDBCSurvivorDAO dao;
+	private JDBCInventoryDAO daoInventory;
+	private JDBCItemDAO daoItem;
 	
 	@Autowired
-	public SurvivorController(JDBCSurvivorDAO dao){
+	public SurvivorController(JDBCSurvivorDAO dao,
+			JDBCInventoryDAO daoInventory, JDBCItemDAO daoItem){
 	     this.dao = dao;
+	     this.daoInventory = daoInventory;
+	     this.daoItem = daoItem;
 	}
 	
 	/**
 	 * create a survivor through RESTful API
-	 * @param user
+	 * @param survivor
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/survivor", method = RequestMethod.POST, headers = {"content-type=application/json,application/xml"})
+	@RequestMapping(value = "/survivor",
+			method = RequestMethod.POST, headers = {"content-type=application/json,application/xml"})
 	public String addSurvivor(@ModelAttribute Survivor survivor, ModelMap model) {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, String> errorHandler = new HashMap<>();
@@ -46,6 +57,9 @@ public class SurvivorController {
 				return mapper.writeValueAsString(errorHandler);
 			}
 			dao.create(survivor);
+			
+			//start the inventory
+			startInventory(survivor);
 			return mapper.writeValueAsString(survivor);
 		} catch (Exception e) {
 			return null;
@@ -121,6 +135,31 @@ public class SurvivorController {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	/**
+	 * The survivor's inventory is started with
+	 * random products amounting 10 points
+	 * @param survivor
+	 */
+	private void startInventory(Survivor survivor) {
+		List<Item> items = daoItem.listItems(); //all items from database
+		int pointsEarned = 0; //total points got
+		Random generator = new Random();
+        
+        while(pointsEarned < 10) {
+        	int randomNum = generator.nextInt(items.size()); //get a random element from items
+        	Item item = items.get(randomNum);
+        	
+        	//if the item's points plus current points is smaller than max points,
+        	//the item is going to be added to the survivor's inventory
+        	if(item.getPoints()+pointsEarned <= 10) {
+        		pointsEarned += item.getPoints();
+        		Inventory inventory = new Inventory(survivor, item);
+        		//create a new inventory
+        		daoInventory.create(inventory);
+        	}
+        }
 	}
 	
 }

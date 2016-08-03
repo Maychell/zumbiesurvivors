@@ -21,7 +21,7 @@ public class Item {
 	public Item() {}
 	
 	/**
-	 * Constructor for new object with params
+	 * Constructor with params for new objects
 	 * @param name
 	 * @param points
 	 */
@@ -31,7 +31,7 @@ public class Item {
 	}
 	
 	/**
-	 * Constructor for stored object with params
+	 * Constructor with params for existing objects
 	 * @param id
 	 * @param name
 	 * @param points

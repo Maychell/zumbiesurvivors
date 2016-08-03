@@ -1,45 +1,47 @@
 package com.zumbieland.model;
 
-/**
- * Factory for Complaint
- * @author maychellfernandesdeoliveira
- *
- */
-public class Complaint {
+public class Inventory {
 	
 	/*
-	CREATE TABLE Complaints(
-		ID INT NOT NULL AUTO_INCREMENT,
-		SURVIVOR_ID INT NOT NULL,
-		PRIMARY KEY (ID),
-		FOREIGN KEY (SURVIVOR_ID) REFERENCES SURVIVORS(ID)
-	);
-	*/
+	 CREATE TABLE Inventories(
+	 	ID INT NOT NULL AUTO_INCREMENT,
+	 	SURVIVOR_ID INT NOT NULL,
+	 	ITEM_ID INT NOT NULL,
+	 	PRIMARY KEY (ID),
+	 	FOREIGN KEY (SURVIVOR_ID) REFERENCES SURVIVORS(ID),
+	 	FOREIGN KEY (ITEM_ID) REFERENCES ITEMS(ID)
+	 );
+	 */
 	
 	private Long id;
 	private Survivor survivor;
+	private Item item;
 	
 	/**
 	 * Default constructor
 	 */
-	public Complaint() {}
+	public Inventory() {}
 	
 	/**
 	 * Constructor with params for new objects
 	 * @param survivor
+	 * @param item
 	 */
-	public Complaint(Survivor survivor) {
+	public Inventory(Survivor survivor, Item item) {
 		this.survivor = survivor;
+		this.item = item;
 	}
 	
 	/**
 	 * Constructor with params for existing objects
 	 * @param id
 	 * @param survivor
+	 * @param item
 	 */
-	public Complaint(Long id, Survivor survivor) {
+	public Inventory(Long id, Survivor survivor, Item item) {
 		this.id = id;
 		this.survivor = survivor;
+		this.item = item;
 	}
 	
 	/**
@@ -66,9 +68,22 @@ public class Complaint {
 	public void setSurvivor(Survivor survivor) {
 		this.survivor = survivor;
 	}
+	/**
+	 * @return the item
+	 */
+	public Item getItem() {
+		return item;
+	}
+	/**
+	 * @param item the item to set
+	 */
+	public void setItem(Item item) {
+		this.item = item;
+	}
 	
-	public static final String COMPLAINT = "Complaints";
+	public static final String INVENTORY = "Inventories";
 	public static final String _ID = "id";
 	public static final String SURVIVOR = "survivor_id";
+	public static final String ITEM = "item_id";
 
 }

@@ -40,5 +40,10 @@
   <bean id="JDBCItemDAO" class="com.zumbieland.dao.JDBCItemDAO">
   	<property name="dataSource"  ref="dataSource" />    
   </bean>
+  
+  <!-- Definition for JDBCInventoryDAO bean -->
+  <bean id="JDBCInventoryDAO" class="com.zumbieland.dao.JDBCInventoryDAO">
+  	<property name="dataSource"  ref="dataSource" />    
+  </bean>
 
 </beans>
