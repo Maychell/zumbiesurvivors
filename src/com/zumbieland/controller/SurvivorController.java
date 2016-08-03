@@ -37,16 +37,42 @@ public class SurvivorController {
 	 * @return
 	 */
 	@RequestMapping(value = "/survivor", method = RequestMethod.POST, headers = {"content-type=application/json,application/xml"})
-	public String addSurvivor(@ModelAttribute Survivor user, ModelMap model) {
+	public String addSurvivor(@ModelAttribute Survivor survivor, ModelMap model) {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, String> errorHandler = new HashMap<>();
 		try {
-			if(user == null || user.getName() == null) {
+			if(survivor == null || survivor.getName() == null) {
 				errorHandler.put("error", "Survivor is missing.");
 				return mapper.writeValueAsString(errorHandler);
 			}
-			dao.create(user);
-			return mapper.writeValueAsString(user);
+			dao.create(survivor);
+			return mapper.writeValueAsString(survivor);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * updates a survivor through RESTful API
+	 * @param id
+	 * @param survivor
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/survivor/{id}", method = RequestMethod.PUT, headers = {"content-type=application/json,application/xml"})
+	public String updateSurvivorLocation(@PathVariable("id") long id, @ModelAttribute Survivor survivor, ModelMap model) {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, String> errorHandler = new HashMap<>();
+		try {
+			if(id <= 0) {
+				errorHandler.put("error", "Survivor is missing.");
+				return mapper.writeValueAsString(errorHandler);
+			}
+			Survivor teste = dao.getSurvivorById(id);
+			teste.setLatitude(survivor.getLatitude());
+			teste.setLongitude(survivor.getLongitude());
+			dao.update(teste);
+			return mapper.writeValueAsString(survivor);
 		} catch (Exception e) {
 			return null;
 		}
@@ -96,4 +122,6 @@ public class SurvivorController {
 		}
 		return null;
 	}
+	
+	
 }

@@ -24,12 +24,12 @@ public class JDBCSurvivorDAO implements SurvivorDAO {
 
 	@Override
 	public void create(Survivor survivor) {
-		String SQL = "insert into "+Survivor.SURVIVOR+" ("
-				+ Survivor.NAME + ", "
-				+ Survivor.AGE + ", "
-				+ Survivor.GENDER + ", "
-				+ Survivor.LATITUDE + ","
-				+ Survivor.LONGITUDE + ") values (?, ?, ?, ?, ?)";
+		String SQL = "insert into "+Survivor.SURVIVOR+" (" +
+				Survivor.NAME + ", " +
+				Survivor.AGE + ", " +
+				Survivor.GENDER + ", " +
+				Survivor.LATITUDE + "," +
+				Survivor.LONGITUDE + ") values (?, ?, ?, ?, ?)";
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
@@ -81,14 +81,11 @@ public class JDBCSurvivorDAO implements SurvivorDAO {
 	@Override
 	public void update(Survivor survivor) {
 		String SQL = "update "+Survivor.SURVIVOR+
-				" set "+ Survivor.NAME + "=?, "
-					+ Survivor.AGE + "=?, "
-					+ Survivor.GENDER + "=?, "
-					+ Survivor.LATITUDE + "=?,"
-					+ Survivor.LONGITUDE +
+				" set " +
+					Survivor.LATITUDE + "=?," +
+					Survivor.LONGITUDE + "=?" +
 				" where id = ?";
-	    jdbcTemplateObject.update(SQL, survivor.getName(), survivor.getAge(),
-	    		survivor.getGender(), survivor.getLatitude(), survivor.getLongitude(), survivor.getId());
+	    jdbcTemplateObject.update(SQL, survivor.getLatitude(), survivor.getLongitude(), survivor.getId());
 	    return;
 	}
 
