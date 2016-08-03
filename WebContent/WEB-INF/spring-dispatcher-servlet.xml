@@ -17,5 +17,18 @@
     <property name="prefix" value="/WEB-INF/jsp/"/>
     <property name="suffix" value=".jsp"/>
   </bean>
+  
+  <!-- Initialization for data source -->
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+  	<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+   	<property name="url" value="jdbc:mysql://localhost:3306/zumbie"/>
+   	<property name="username" value="root"/>
+   	<property name="password" value="newpwd"/>
+  </bean>
+  
+  <!-- Definition for JDBCSurvivorDAO bean -->
+  <bean id="JDBCSurvivorDAO" class="com.zumbieland.dao.JDBCSurvivorDAO">
+  	<property name="dataSource"  ref="dataSource" />    
+  </bean>
 
 </beans>
