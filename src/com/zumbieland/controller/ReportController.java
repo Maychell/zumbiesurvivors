@@ -51,4 +51,29 @@ public class ReportController {
 		}
 		return null;
 	}
+	
+	/**
+	 * returns the percentage of non-infected survivors
+	 * @return
+	 */
+	@RequestMapping(value = "/reportNotInfected", method = RequestMethod.GET, headers="Accept=application/json")
+	public String getNonInfectedPercentage() {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, String> messageHandler = new HashMap<>();
+		
+		int totalSurvivors = daoSurvivor.count();
+		int notInfectedSurvivors = totalSurvivors - daoSurvivor.countInfected();
+		
+		try {
+			messageHandler.put("report", ""+((float)notInfectedSurvivors*100/totalSurvivors));
+			return mapper.writeValueAsString(messageHandler);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
